@@ -91,3 +91,47 @@ ORDER BY
     category_revenue DESC
 LIMIT 10;
 ```
+## 3. Clientes com Maior Valor de Compra (LTV - Lifetime Value)
+
+**Pergunta de Negócio:** Quem são os clientes mais valiosos com base no valor total de suas compras, para programas de fidelidade ou comunicação direcionada?
+
+```sql
+SELECT
+    c.customer_id,
+    c.customer_city,
+    c.customer_state,
+    SUM(oi.price + oi.freight_value) AS total_spent
+FROM
+    customers AS c
+JOIN
+    orders AS o ON c.customer_id = o.customer_id
+JOIN
+    order_items AS oi ON o.order_id = oi.order_id
+GROUP BY
+    c.customer_id,
+    c.customer_city,
+    c.customer_state
+ORDER BY
+    total_spent DESC
+LIMIT 5;
+
+```
+## 4. Média de Itens por Pedido (Usando CTE)
+
+**Pergunta de Negócio:** Em média, quantos itens um cliente compra por pedido, indicando o comportamento de compra e otimização de estratégias de up-selling/cross-selling?
+
+```sql
+WITH OrderItemCounts AS (
+    SELECT
+        order_id,
+        COUNT(order_item_id) AS num_items
+    FROM
+        order_items
+    GROUP BY
+        order_id
+)
+SELECT
+    AVG(num_items) AS average_items_per_order
+FROM
+    OrderItemCounts;
+```
