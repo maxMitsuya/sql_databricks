@@ -135,3 +135,63 @@ SELECT
 FROM
     OrderItemCounts;
 ```
+## 5. Status dos Pedidos (Usando CTE)
+
+**Pergunta de Negócio:** Qual a distribuição dos status dos pedidos e qual a média de tempo para entrega, avaliando a eficiência da operação de entrega?
+
+```sql
+-- Contagem de Pedidos por Status
+SELECT
+    order_status,
+    COUNT(order_id) AS num_orders
+FROM
+    orders
+GROUP BY
+    order_status
+ORDER BY
+    num_orders DESC;
+```
+
+## 6. Criação de uma VIEW para Análise Contínua: Vendas Detalhadas
+
+**Propósito:** Consolidar informações de múltiplas tabelas em uma única VIEW para simplificar consultas futuras e a construção do dashboard, oferecendo uma visão unificada de pedidos, itens, produtos e clientes.
+
+```sql
+CREATE VIEW sales_detail_view AS
+SELECT
+    o.order_id,
+    o.order_status,
+    o.order_purchase_timestamp,
+    o.order_approved_at,
+    o.order_delivered_customer_date,
+    c.customer_id,
+    c.customer_city,
+    c.customer_state,
+    p.product_id,
+    p.product_category_name,
+    oi.price,
+    oi.freight_value,
+    (oi.price + oi.freight_value) AS total_item_value
+FROM
+    orders AS o
+JOIN
+    customers AS c ON o.customer_id = c.customer_id
+JOIN
+    order_items AS oi ON o.order_id = oi.order_id
+JOIN
+    products AS p ON oi.product_id = p.product_id;
+```
+
+## 📊 Dashboard de Vendas
+
+O dashboard foi construído no Databricks para visualizar os principais insights extraídos das consultas SQL. Ele oferece uma visão consolidada do desempenho de vendas, tendências, categorias de produtos e comportamento do cliente, sendo uma ferramenta essencial para a tomada de decisões estratégicas.
+
+**Principais Seções do Dashboard:**
+
+KPIs Essenciais: Receita Total, Número Total de Pedidos,Total de Pedidos Aprovados, Pedidos em Trânsito e Pedidos Entregues
+
+Tendência de Vendas: Gráfico de linha mostrando receita e número de pedidos ao longo do tempo.
+
+Performance de Produtos: Gráfico de barras das Top 10 Categorias por Receita.
+
+![Dashboard de Vendas E-commerce](images/dashboard_final.png)
