@@ -73,3 +73,21 @@ ORDER BY
     purchase_year,
     purchase_month;
 ```
+## 2. Top 10 Categorias Mais Vendidas em Receita
+
+**Pergunta de Negócio:** Quais categorias de produtos geram a maior receita para a empresa, ajudando a focar esforços de marketing e estoque?
+
+```sql
+SELECT
+    p.product_category_name,
+    SUM(oi.price + oi.freight_value) AS category_revenue
+FROM
+    products AS p
+JOIN
+    order_items AS oi ON p.product_id = oi.product_id
+GROUP BY
+    p.product_category_name
+ORDER BY
+    category_revenue DESC
+LIMIT 10;
+```
