@@ -194,4 +194,4 @@ Tendência de Vendas: Gráfico de linha mostrando receita e número de pedidos a
 
 Performance de Produtos: Gráfico de barras das Top 10 Categorias por Receita.
 
-![Dashboard de Vendas E-commerce](images/dashboard_final.png)
+![Dashboard de Vendas E-commerce](https://github.com/maxMitsuya/sql_databricks/blob/main/Dashboard_DataBricks.png)
